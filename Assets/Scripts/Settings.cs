@@ -12,9 +12,12 @@ public class Settings : ScriptableObject
 public class PlayerSettings
 {
     public float Speed = 1f;
+    public float BackSpeedPart = .5f;
     public float AngularSpeed = 1f;
     public float FireRate = 1f;
     public float WrapMargin = 1f;
+    public float InvurnabilityTime = 3f;
+    public int Lives = 3;
 }
 
 [System.Serializable]

@@ -4,6 +4,7 @@ using UnityEngine;
 public interface IInputService : ITickable, IService
 {
     bool IsPlayerMoveForwardPressed();
+    bool IsPlayerMoveBackwardPressed();
     bool IsPlayerTurnLeftPressed();
     bool IsPlayerTurnRightPressed();
     bool IsPlayerShootPressed();
@@ -14,6 +15,11 @@ public class InputService : IInputService
     public bool IsPlayerMoveForwardPressed()
     {
         return _playerForward;
+    }
+
+    public bool IsPlayerMoveBackwardPressed()
+    {
+        return _playerBackward;
     }
 
     public bool IsPlayerTurnLeftPressed()
@@ -34,11 +40,12 @@ public class InputService : IInputService
     public void Tick(float _)
     {
         _playerForward = Input.GetKey(KeyCode.UpArrow) | Input.GetKey(KeyCode.W);
+        _playerBackward = Input.GetKey(KeyCode.DownArrow) | Input.GetKey(KeyCode.S);
         _playerLeftTurn = Input.GetKey(KeyCode.LeftArrow) | Input.GetKey(KeyCode.A);
         _playerRightTurn = Input.GetKey(KeyCode.RightArrow) | Input.GetKey(KeyCode.D);
         _playerShoot = Input.GetKey(KeyCode.Space);
 
     }
 
-    bool _playerForward, _playerLeftTurn, _playerRightTurn, _playerShoot;
+    bool _playerForward, _playerBackward, _playerLeftTurn, _playerRightTurn, _playerShoot;
 }

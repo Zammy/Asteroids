@@ -56,12 +56,20 @@ public class AsteroidService : IAsteroidService
         {
             _spawnTimer = 0f;
 
-            var asteroid = GetAsteroidLevel(3);
-            asteroid.Pos = GenRndPosOnEdge(3);
-            float speed = UnityEngine.Random.Range(_settings.Speeds[3].x, _settings.Speeds[3].y);
-            asteroid.SetVelocity(UnityEngine.Random.insideUnitCircle * speed);
-            asteroid.Torque = UnityEngine.Random.Range(-_settings.Torques[3], _settings.Torques[3]);
+            for (int i = 0; i < 3; i++)
+            {
+                SpawnNewAsteroid();
+            }
         }
+    }
+
+    private void SpawnNewAsteroid()
+    {
+        var asteroid = GetAsteroidLevel(3);
+        asteroid.Pos = GenRndPosOnEdge(3);
+        float speed = UnityEngine.Random.Range(_settings.Speeds[3].x, _settings.Speeds[3].y);
+        asteroid.SetVelocity(UnityEngine.Random.insideUnitCircle * speed);
+        asteroid.Torque = UnityEngine.Random.Range(-_settings.Torques[3], _settings.Torques[3]);
     }
 
     private void ApplyTorque(float deltaTime)
