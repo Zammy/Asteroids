@@ -1,8 +1,16 @@
 using UnityEngine;
 using SSLAB;
+using System;
 
+public interface IPlayer : IWrappable, IService
+{
+    int Lives { get; }
+    int Score { get; set; }
+    Action OnLivesChanged { get; set; } 
+    Action OnScoreChanged { get; set; }
+}
 
-public class Player : MonoBehaviour, IWrappable
+public class Player : MonoBehaviour, IPlayer, IWrappable
 {
     [Header("Refs")]
     [SerializeField] Transform Muzzle;
@@ -18,11 +26,18 @@ public class Player : MonoBehaviour, IWrappable
 
     public float WrapMargin => _settings.WrapMargin;
 
-    public int Lives;
+    public Action OnLivesChanged { get; set; }
+    public int Lives { get; private set; }
+
+    public Action OnScoreChanged { get; set; }
+    public int Score { get; set; }
+
 
     void Awake()
     {
         _body = GetComponent<Rigidbody2D>();
+
+        ServiceLocator.Instance.RegisterService(this);
     }
 
     void Start()
@@ -32,10 +47,17 @@ public class Player : MonoBehaviour, IWrappable
         _projectileService = sl.GetService<IProjectileService>();
         _asteroidService = sl.GetService<IAsteroidService>();
 
-        sl.GetService<ILevelWrapService>()
-            .RegisterWrappable(this);
+        sl.GetService<ILevelWrapService>().RegisterWrappable(this);
         _settings = sl.GetService<ISettingsService>().Settings.Player;
         Lives = _settings.Lives;
+
+        Score = 0;
+        _asteroidService.OnAsteriodHit += OnAsteroidHit;
+    }
+    void OnDestroy()
+    {
+        ServiceLocator.Instance.UnregisterService(this);
+        _asteroidService.OnAsteriodHit -= OnAsteroidHit;
     }
 
     private void Update()
@@ -92,6 +114,7 @@ public class Player : MonoBehaviour, IWrappable
         if (asteroid)
         {
             Lives--;
+            this?.OnLivesChanged();
             if (Lives == 0)
             {
                 //TODO: Implement
@@ -101,6 +124,12 @@ public class Player : MonoBehaviour, IWrappable
 
             _asteroidService.AsteroidHit(asteroid, (asteroid.Pos - Pos).normalized);
         }
+    }
+
+    private void OnAsteroidHit(int score)
+    {
+        Score += score;
+        this?.OnScoreChanged();
     }
 
     private void AnimateExaust(GameObject[] exaust, bool enable)

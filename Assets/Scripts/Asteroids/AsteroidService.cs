@@ -1,10 +1,12 @@
 using SSLAB;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public interface IAsteroidService : IService, ITickable, IInitializable, IEnablable
 {
     void AsteroidHit(Asteroid asteroid, Vector2 hit);
+    Action<int> OnAsteriodHit { get; set; }
 }
 
 public class AsteroidService : IAsteroidService
@@ -17,6 +19,8 @@ public class AsteroidService : IAsteroidService
             _isEnabled = value;
         }
     }
+
+    public Action<int> OnAsteriodHit { get; set; }
 
     public void Init()
     {
@@ -84,13 +88,13 @@ public class AsteroidService : IAsteroidService
         }
     }
 
-
     public void AsteroidHit(Asteroid asteroid, Vector2 hit)
     {
         int size = asteroid.Size;
         _asteroids[size].Remove(asteroid);
         asteroid.gameObject.SetActive(false);
         _levelWrapService.UnregisterWrappable(asteroid);
+        this?.OnAsteriodHit(_settings.Score[size]);
 
         if (asteroid.Size == 0)
         {

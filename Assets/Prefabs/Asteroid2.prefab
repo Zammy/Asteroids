@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 2019712502734620536, guid: 657589f64adbf854398417331592ca80, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1335499673870057088, guid: c2a55be126310294c8e22ac588907756, type: 3}
+      objectReference: {fileID: 7723543999257568306, guid: 10392624813d2eb48bc209ee09bd5b28, type: 3}
     - target: {fileID: 5084677297123074398, guid: 657589f64adbf854398417331592ca80, type: 3}
       propertyPath: m_Radius
       value: 0.15
