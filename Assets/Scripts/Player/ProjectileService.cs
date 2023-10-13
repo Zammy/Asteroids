@@ -16,6 +16,7 @@ public class ProjectileService : IProjectileService
         _settings = sl.GetService<ISettingsService>().Settings.Projectile;
         _objSpawnerService = sl.GetService<IObjSpawnerService>();
         _asteroidService = sl.GetService<IAsteroidService>();
+        _vfxService = sl.GetService<IVFXService>();
     }
 
     public void TickFixed(float fixedDeltaTime)
@@ -26,6 +27,11 @@ public class ProjectileService : IProjectileService
             projectile.Life -= fixedDeltaTime;
             if (projectile.Life < 0f)
             {
+                //Has hit an asteroid
+                if (projectile.Life < -99f)
+                {
+                    _vfxService.PlayVFXAt(VFXType.Explosion, projectile.transform.position);
+                }
                 //TODO: possible optimization to cache instances
                 _objSpawnerService.Destroy(projectile.gameObject);
                 _projectiles.Remove(projectile);
@@ -47,6 +53,7 @@ public class ProjectileService : IProjectileService
     ProjectileSettings _settings;
     IObjSpawnerService _objSpawnerService;
     IAsteroidService _asteroidService;
+    IVFXService _vfxService;
 
     List<Projectile> _projectiles;
 }

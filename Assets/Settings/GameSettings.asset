@@ -52,3 +52,12 @@ MonoBehaviour:
     - 1
     - 2
     - 20
+  VFX:
+    VFXPrefabs:
+    - {fileID: 1352187851335352437, guid: 2e5e6a650a8e26e4aab33fb9a61abfb3, type: 3}
+    - {fileID: 1269613258028135212, guid: 8dc65d43fd1d90b489df4ba0c66db7af, type: 3}
+    - {fileID: 2391280998749471236, guid: acff1defd084d2541989757e04e0a597, type: 3}
+    Lifetimes:
+    - 0.5
+    - 2
+    - 0.6

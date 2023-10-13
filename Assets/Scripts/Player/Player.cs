@@ -6,7 +6,7 @@ public interface IPlayer : IWrappable, IService
 {
     int Lives { get; }
     int Score { get; set; }
-    Action OnLivesChanged { get; set; } 
+    Action OnLivesChanged { get; set; }
     Action OnScoreChanged { get; set; }
 }
 
@@ -46,6 +46,7 @@ public class Player : MonoBehaviour, IPlayer, IWrappable
         _input = sl.GetService<IInputService>();
         _projectileService = sl.GetService<IProjectileService>();
         _asteroidService = sl.GetService<IAsteroidService>();
+        _vfxService = sl.GetService<IVFXService>();
 
         sl.GetService<ILevelWrapService>().RegisterWrappable(this);
         _settings = sl.GetService<ISettingsService>().Settings.Player;
@@ -120,6 +121,10 @@ public class Player : MonoBehaviour, IPlayer, IWrappable
                 //TODO: Implement
                 Debug.Log("YOU ARE DEAD BOI!");
             }
+            else
+            {
+                _vfxService.PlayVFXAt(VFXType.Bump, col.contacts[0].point);
+            }
             _isInvurnableUntil = Time.time + _settings.InvurnabilityTime;
 
             _asteroidService.AsteroidHit(asteroid, (asteroid.Pos - Pos).normalized);
@@ -144,6 +149,7 @@ public class Player : MonoBehaviour, IPlayer, IWrappable
     IProjectileService _projectileService;
     IInputService _input;
     IAsteroidService _asteroidService;
+    IVFXService _vfxService;
 
     Rigidbody2D _body;
 

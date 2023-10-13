@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -24,7 +22,7 @@ public class Projectile : MonoBehaviour
         if (asteroid)
         {
             AsteroidService.AsteroidHit(asteroid, transform.up);
-            Life = -1f;
+            Life = -100f;
         }
     }
 

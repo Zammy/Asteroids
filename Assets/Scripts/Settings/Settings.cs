@@ -6,6 +6,7 @@ public class Settings : ScriptableObject
     public PlayerSettings Player;
     public ProjectileSettings Projectile;
     public AsteroidSettings Asteroids;
+    public VFXSettings VFX;
 }
 
 [System.Serializable]
@@ -39,5 +40,12 @@ public class AsteroidSettings
 
     public float[] SpawnTimer;
     public float[] Torques;
+}
+
+[System.Serializable]
+public class VFXSettings
+{
+    public GameObject[] VFXPrefabs;
+    public float[] Lifetimes;
 }
 

@@ -27,10 +27,9 @@ public class AsteroidService : IAsteroidService
         var sl = ServiceLocator.Instance;
         _objSpawnerService = sl.GetService<IObjSpawnerService>();
         _levelWrapService = sl.GetService<LevelWrapService>();
+        _vfxService = sl.GetService<IVFXService>();
 
-        _settings = sl.GetService<ISettingsService>()
-                .Settings
-                .Asteroids;
+        _settings = sl.GetService<ISettingsService>().Settings.Asteroids;
 
         _asteroids = new List<Asteroid>[4];
         for (int i = 0; i < 4; i++)
@@ -98,7 +97,7 @@ public class AsteroidService : IAsteroidService
 
         if (asteroid.Size == 0)
         {
-            //TODO: spawn vfx
+            _vfxService.PlayVFXAt(VFXType.Debris, asteroid.Pos);
             return;
         }
 
@@ -185,6 +184,7 @@ public class AsteroidService : IAsteroidService
     AsteroidSettings _settings;
     IObjSpawnerService _objSpawnerService;
     ILevelWrapService _levelWrapService;
+    IVFXService _vfxService;
 
     Vector2 _limits;
     List<Asteroid>[] _asteroids;

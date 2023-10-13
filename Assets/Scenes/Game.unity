@@ -1272,6 +1272,7 @@ GameObject:
   - component: {fileID: 1068208532}
   - component: {fileID: 1068208531}
   - component: {fileID: 1068208533}
+  - component: {fileID: 1068208534}
   m_Layer: 0
   m_Name: Bootstrapper
   m_TagString: Untagged
@@ -1318,6 +1319,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: a549c5491da9b7740a9aa017e7a540f5, type: 2}
+--- !u!114 &1068208534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1068208530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2b4e7f5e4ead3a4ba98f80d56b68ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1117601279 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2924264830123169907, guid: dd695a199bcce4e4d8b309e348299ef8, type: 3}
