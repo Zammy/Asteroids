@@ -23,6 +23,5 @@ public class PlayerLivesWidget : MonoBehaviour
         ScoreText.text = string.Format("x{0}", _player.Lives);
     }
 
-
     IPlayer _player;
 }

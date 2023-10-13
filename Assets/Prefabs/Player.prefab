@@ -172,7 +172,6 @@ MonoBehaviour:
   - {fileID: 4367570313713105853}
   - {fileID: 8575642436977787925}
   InvurnabilityVFX: {fileID: 4993131682330264248}
-  Lives: 0
   _shootTimer: 0
   _isInvurnableUntil: -1
 --- !u!58 &4301866620984893287
@@ -229,7 +228,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7081504661948606651
 Transform:
   m_ObjectHideFlags: 0
@@ -393,6 +392,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 3892631210305794662, guid: c0373b1c06d99a14d8e792c90be64671, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0373b1c06d99a14d8e792c90be64671, type: 3}
 --- !u!1 &4367570313713105853 stripped
@@ -471,6 +474,10 @@ PrefabInstance:
     - target: {fileID: 3892631210305794662, guid: c0373b1c06d99a14d8e792c90be64671, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892631210305794662, guid: c0373b1c06d99a14d8e792c90be64671, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0373b1c06d99a14d8e792c90be64671, type: 3}
@@ -563,6 +570,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 3892631210305794662, guid: c0373b1c06d99a14d8e792c90be64671, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0373b1c06d99a14d8e792c90be64671, type: 3}
 --- !u!1 &8575642436977787925 stripped
@@ -641,6 +652,10 @@ PrefabInstance:
     - target: {fileID: 3892631210305794662, guid: c0373b1c06d99a14d8e792c90be64671, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892631210305794662, guid: c0373b1c06d99a14d8e792c90be64671, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0373b1c06d99a14d8e792c90be64671, type: 3}

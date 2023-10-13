@@ -2,7 +2,7 @@ using UnityEngine;
 using SSLAB;
 using System;
 
-public interface IPlayer : IWrappable, IService
+public interface IPlayer : IWrappable, IEnablable, IService
 {
     int Lives { get; }
     int Score { get; set; }
@@ -12,11 +12,15 @@ public interface IPlayer : IWrappable, IService
 
 public class Player : MonoBehaviour, IPlayer, IWrappable
 {
+    public const string BEST_SCORE_KEY = "BestScore";
+
     [Header("Refs")]
     [SerializeField] Transform Muzzle;
     [SerializeField] GameObject[] Exaust;
     [SerializeField] GameObject[] BackExaust;
     [SerializeField] GameObject InvurnabilityVFX;
+
+    public bool IsEnabled { get; set; }
 
     public Vector2 Pos
     {
@@ -32,7 +36,6 @@ public class Player : MonoBehaviour, IPlayer, IWrappable
     public Action OnScoreChanged { get; set; }
     public int Score { get; set; }
 
-
     void Awake()
     {
         _body = GetComponent<Rigidbody2D>();
@@ -47,22 +50,28 @@ public class Player : MonoBehaviour, IPlayer, IWrappable
         _projectileService = sl.GetService<IProjectileService>();
         _asteroidService = sl.GetService<IAsteroidService>();
         _vfxService = sl.GetService<IVFXService>();
+        _gameStateManager = sl.GetService<IGameStateManager>();
+
+        _settings = sl.GetService<ISettingsService>().Settings.Player;
 
         sl.GetService<ILevelWrapService>().RegisterWrappable(this);
-        _settings = sl.GetService<ISettingsService>().Settings.Player;
-        Lives = _settings.Lives;
 
-        Score = 0;
         _asteroidService.OnAsteriodHit += OnAsteroidHit;
+        _gameStateManager.OnStateChanged += OnStateChanged;
     }
+
     void OnDestroy()
     {
         ServiceLocator.Instance.UnregisterService(this);
         _asteroidService.OnAsteriodHit -= OnAsteroidHit;
+        _gameStateManager.OnStateChanged -= OnStateChanged;
     }
 
     private void Update()
     {
+        if (!IsEnabled)
+            return;
+
         _shootTimer -= Time.deltaTime;
 
         InvurnabilityVFX.SetActive(_isInvurnableUntil > Time.time);
@@ -70,6 +79,9 @@ public class Player : MonoBehaviour, IPlayer, IWrappable
 
     void FixedUpdate()
     {
+        if (!IsEnabled)
+            return;
+
         if (_input.IsPlayerMoveForwardPressed())
         {
             _body.AddForce(transform.up * _settings.Speed * Time.fixedDeltaTime, ForceMode2D.Force);
@@ -111,15 +123,18 @@ public class Player : MonoBehaviour, IPlayer, IWrappable
         if (_isInvurnableUntil > Time.time)
             return;
 
+        if (Lives < 0)
+            return;
+
         var asteroid = col.collider.GetComponent<Asteroid>();
         if (asteroid)
         {
             Lives--;
             this?.OnLivesChanged();
-            if (Lives == 0)
+            if (Lives < 0)
             {
-                //TODO: Implement
-                Debug.Log("YOU ARE DEAD BOI!");
+                _gameStateManager.ChangeStateTo(GameState.EndGame);
+                return;
             }
             else
             {
@@ -129,6 +144,33 @@ public class Player : MonoBehaviour, IPlayer, IWrappable
 
             _asteroidService.AsteroidHit(asteroid, (asteroid.Pos - Pos).normalized);
         }
+    }
+
+    private void OnStateChanged(GameState currentState)
+    {
+        if (currentState == GameState.Game)
+        {
+            IsEnabled = true;
+
+            Reset();
+            return;
+        }
+
+        AnimateExaust(Exaust, enable: false);
+        AnimateExaust(BackExaust, enable: false);
+        InvurnabilityVFX.SetActive(false);
+
+        IsEnabled = false;
+    }
+
+    private void Reset()
+    {
+        transform.position = Vector2.zero;
+        transform.up = Vector2.up;
+        Lives = _settings.Lives;
+        Score = 0;
+        this?.OnLivesChanged();
+        this?.OnScoreChanged();
     }
 
     private void OnAsteroidHit(int score)
@@ -150,6 +192,7 @@ public class Player : MonoBehaviour, IPlayer, IWrappable
     IInputService _input;
     IAsteroidService _asteroidService;
     IVFXService _vfxService;
+    IGameStateManager _gameStateManager;
 
     Rigidbody2D _body;
 

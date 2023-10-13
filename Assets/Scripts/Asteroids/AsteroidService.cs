@@ -11,14 +11,7 @@ public interface IAsteroidService : IService, ITickable, IInitializable, IEnabla
 
 public class AsteroidService : IAsteroidService
 {
-    public bool IsEnabled
-    {
-        get => _isEnabled;
-        set
-        {
-            _isEnabled = value;
-        }
-    }
+    public bool IsEnabled { get; set; }
 
     public Action<int> OnAsteriodHit { get; set; }
 
@@ -28,6 +21,7 @@ public class AsteroidService : IAsteroidService
         _objSpawnerService = sl.GetService<IObjSpawnerService>();
         _levelWrapService = sl.GetService<LevelWrapService>();
         _vfxService = sl.GetService<IVFXService>();
+        _gameStateManager = sl.GetService<IGameStateManager>();
 
         _settings = sl.GetService<ISettingsService>().Settings.Asteroids;
 
@@ -37,7 +31,37 @@ public class AsteroidService : IAsteroidService
             _asteroids[i] = new List<Asteroid>();
         }
         _limits = Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 0));
-        _spawnTimer = _settings.SpawnTimer[0];
+        _spawnTimer = _settings.SpawnTimer;
+
+        _gameStateManager.OnStateChanged += OnStageChanged;
+    }
+
+    private void OnStageChanged(GameState state)
+    {
+        if (state != GameState.Game)
+        {
+            IsEnabled = false;
+            if (state == GameState.MainMenu)
+            {
+                ClearAsteroids();
+            }
+            return;
+        }
+        IsEnabled = true;
+    }
+
+    private void ClearAsteroids()
+    {
+        for (int size = 0; size < _asteroids.Length; size++)
+        {
+            var asteroids = _asteroids[size];
+            for (int i = 0; i < asteroids.Count; i++)
+            {
+                var asteroid = asteroids[i];
+                asteroid.gameObject.SetActive(false);
+                _levelWrapService.UnregisterWrappable(asteroid);
+            }
+        }
     }
 
     public void Tick(float deltaTime)
@@ -54,20 +78,18 @@ public class AsteroidService : IAsteroidService
     {
         _spawnTimer += deltaTime;
 
-        //TODO: introduce level difficulty
-        if (_spawnTimer > _settings.SpawnTimer[0])
+        if (_spawnTimer > _settings.SpawnTimer 
+            && _bigAsteroidsCount < _settings.MaximumBigSizeAsteroids)
         {
             _spawnTimer = 0f;
-
-            for (int i = 0; i < 3; i++)
-            {
-                SpawnNewAsteroid();
-            }
+            SpawnNewAsteroid();
         }
     }
 
     private void SpawnNewAsteroid()
     {
+        _bigAsteroidsCount++;
+
         var asteroid = GetAsteroidLevel(3);
         asteroid.Pos = GenRndPosOnEdge(3);
         float speed = UnityEngine.Random.Range(_settings.Speeds[3].x, _settings.Speeds[3].y);
@@ -90,10 +112,14 @@ public class AsteroidService : IAsteroidService
     public void AsteroidHit(Asteroid asteroid, Vector2 hit)
     {
         int size = asteroid.Size;
-        _asteroids[size].Remove(asteroid);
         asteroid.gameObject.SetActive(false);
         _levelWrapService.UnregisterWrappable(asteroid);
         this?.OnAsteriodHit(_settings.Score[size]);
+
+        if (asteroid.Size == 3)
+        {
+            _bigAsteroidsCount--;
+        }
 
         if (asteroid.Size == 0)
         {
@@ -129,6 +155,7 @@ public class AsteroidService : IAsteroidService
             var cachedInstance = _asteroids[size][i];
             if (!cachedInstance.gameObject.activeSelf)
             {
+                cachedInstance.gameObject.SetActive(true);
                 _levelWrapService.RegisterWrappable(cachedInstance);
                 return cachedInstance;
             }
@@ -185,9 +212,10 @@ public class AsteroidService : IAsteroidService
     IObjSpawnerService _objSpawnerService;
     ILevelWrapService _levelWrapService;
     IVFXService _vfxService;
+    IGameStateManager _gameStateManager;
 
     Vector2 _limits;
     List<Asteroid>[] _asteroids;
-    bool _isEnabled;
     float _spawnTimer;
+    int _bigAsteroidsCount = 0;
 }

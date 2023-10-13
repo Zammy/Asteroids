@@ -38,7 +38,8 @@ public class AsteroidSettings
     public int[] Score;
     public float[] SplitAngles;
 
-    public float[] SpawnTimer;
+    public float SpawnTimer = 1f;
+    public float MaximumBigSizeAsteroids = 50;
     public float[] Torques;
 }
 

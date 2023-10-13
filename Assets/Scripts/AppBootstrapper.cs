@@ -13,8 +13,6 @@ public class AppBootstrapper : Bootstrapper
         sl.RegisterService(new LevelWrapService());
         sl.RegisterService(new AsteroidService());
         sl.RegisterService(new VFXService());
-
-        //TODO: StateManager to take care of this
-        sl.GetService<IAsteroidService>().IsEnabled = true;
+        sl.RegisterService(new GameStateManager(), priority: 100);
     }
 }

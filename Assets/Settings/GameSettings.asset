@@ -45,8 +45,8 @@ MonoBehaviour:
     - 90
     - 80
     - 60
-    SpawnTimer:
-    - 3
+    SpawnTimer: 3
+    MaximumBigSizeAsteroids: 50
     Torques:
     - 1
     - 1
