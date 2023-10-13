@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameSettings
   m_EditorClassIdentifier: 
   Player:
-    Speed: 350
+    Speed: 300
     AngularSpeed: 25
     FireRate: 0.4
     WrapMargin: 0.22
@@ -21,3 +21,31 @@ MonoBehaviour:
     ProjectilePrefab: {fileID: 6147514681656833967, guid: 4dd8cd3d54237464a8988c9b15546a87, type: 3}
     Speed: 7
     Lifetime: 1
+  Asteroids:
+    Prefabs:
+    - {fileID: 8595495972313956955, guid: 8d777d8a81d0196439a0ca74fad825a1, type: 3}
+    - {fileID: 8573983221027578420, guid: 0a935642be11a90458b0845a1e05d8fa, type: 3}
+    - {fileID: 1599654099961499135, guid: 2f56a925287796f4daa773cefb5b7335, type: 3}
+    - {fileID: 6085424372287502164, guid: 657589f64adbf854398417331592ca80, type: 3}
+    WrapMargins:
+    - 0.1
+    - 0.1
+    - 0.2
+    - 0.3
+    Speeds:
+    - {x: 1, y: 1.5}
+    - {x: 0.8, y: 1.2}
+    - {x: 0.5, y: 1}
+    - {x: 0.1, y: 0.4}
+    Score: 320000006400000096000000c8000000
+    SplitAngles:
+    - 90
+    - 80
+    - 60
+    SpawnTimer:
+    - 3
+    Torques:
+    - 1
+    - 1
+    - 2
+    - 20

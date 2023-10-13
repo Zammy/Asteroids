@@ -5,6 +5,7 @@ public class Settings : ScriptableObject
 {
     public PlayerSettings Player;
     public ProjectileSettings Projectile;
+    public AsteroidSettings Asteroids;
 }
 
 [System.Serializable]
@@ -23,3 +24,17 @@ public class ProjectileSettings
     public float Speed = 1f;
     public float Lifetime = 1f;
 }
+
+[System.Serializable]
+public class AsteroidSettings
+{
+    public GameObject[] Prefabs;
+    public float[] WrapMargins;
+    public Vector2[] Speeds;
+    public int[] Score;
+    public float[] SplitAngles;
+
+    public float[] SpawnTimer;
+    public float[] Torques;
+}
+

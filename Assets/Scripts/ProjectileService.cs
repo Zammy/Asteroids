@@ -15,6 +15,7 @@ public class ProjectileService : IProjectileService
         var sl = ServiceLocator.Instance;
         _settings = sl.GetService<ISettingsService>().Settings.Projectile;
         _objSpawnerService = sl.GetService<IObjSpawnerService>();
+        _asteroidService = sl.GetService<IAsteroidService>();
     }
 
     public void TickFixed(float fixedDeltaTime)
@@ -38,12 +39,14 @@ public class ProjectileService : IProjectileService
         var proj = projGo.GetComponent<Projectile>();
         proj.transform.up = dir;
         proj.Life = _settings.Lifetime;
+        proj.AsteroidService = _asteroidService;
         proj.SetVelocity(dir * _settings.Speed);
         _projectiles.Add(proj);
     }
 
     ProjectileSettings _settings;
     IObjSpawnerService _objSpawnerService;
+    IAsteroidService _asteroidService;
 
     List<Projectile> _projectiles;
 }
