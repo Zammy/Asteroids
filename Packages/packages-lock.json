@@ -179,11 +179,10 @@
       }
     },
     "com.zammy.sslab": {
-      "version": "git@github.com:Zammy/SSLAB.git",
+      "version": "file:com.zammy.sslab@e90d981961",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "e90d981961c2f79330f636ee351e7b20fcd2eacc"
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
